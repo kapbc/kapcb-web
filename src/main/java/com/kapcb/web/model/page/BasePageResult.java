@@ -24,9 +24,15 @@ import java.util.List;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 @ApiModel(value = "分页返回值实体对象", description = "分页返回值实体对象")
-public class BasePageResult<T> extends BasePagination implements Serializable {
+public class BasePageResult<T> implements IPageResult<T>, Serializable {
 
     private static final long serialVersionUID = 5794340994984498956L;
+
+    @ApiModelProperty(value = "当前页数")
+    private long pageNum;
+
+    @ApiModelProperty(value = "当前每页显示条数")
+    private long pageSize;
 
     @ApiModelProperty(value = "总条数")
     private long total;
