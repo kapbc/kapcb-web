@@ -21,6 +21,8 @@
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
+        <kapcb-framework.version>1.0-SNAPSHOT</kapcb-framework.version>
         <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
         <maven-archetype-plugin.version>3.2.0</maven-archetype-plugin.version>
     </properties>
@@ -57,7 +59,7 @@
         <dependency>
             <groupId>com.kapcb.ccc</groupId>
             <artifactId>kapcb-framework</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${kapcb-framework.version}</version>
         </dependency>
     </dependencies>
 
@@ -78,6 +80,20 @@
                 <version>${maven-surefire-plugin.version}</version>
                 <configuration>
                     <skipTests>true</skipTests>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>${maven-jar-plugin.version}</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib/</classpathPrefix>
+                            <mainClass>NONE</mainClass>
+                        </manifest>
+                    </archive>
                 </configuration>
             </plugin>
         </plugins>
