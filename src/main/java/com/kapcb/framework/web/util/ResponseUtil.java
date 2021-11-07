@@ -1,8 +1,11 @@
 package com.kapcb.framework.web.util;
 
+import cn.hutool.http.ContentType;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import kapcb.framework.web.constants.enums.LongPool;
 import kapcb.framework.web.constants.enums.StringPool;
+import kapcb.framework.web.util.JsonUtil;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -83,4 +86,14 @@ public class ResponseUtil {
         return setUpResponse(httpServletResponse, MediaType.APPLICATION_JSON_VALUE, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, value);
     }
 
+    public static <T> void setUpResponse(HttpServletResponse response, String contentType, T data) throws IOException {
+        response.setContentType(contentType);
+        response.getOutputStream().write(JSON.toJSONBytes(data));
+        response.getOutputStream().flush();
+        response.getOutputStream().close();
+    }
+
+    public static <T> void setUpJSONResponse(HttpServletResponse response, T data) throws IOException {
+        setUpResponse(response, ContentType.JSON.getValue(), data);
+    }
 }
