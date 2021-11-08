@@ -1,9 +1,9 @@
 package com.kapcb.framework.web.handler;
 
 import cn.hutool.core.util.StrUtil;
+import com.kapcb.framework.common.constants.enums.StringPool;
+import com.kapcb.framework.common.result.CommonResult;
 import com.kapcb.framework.web.exception.BusinessException;
-import com.kapcb.framework.web.model.result.CommonResult;
-import kapcb.framework.web.constants.enums.StringPool;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;

@@ -1,8 +1,8 @@
 package com.kapcb.framework.web.aspect;
 
-import kapcb.framework.web.constants.enums.StringPool;
-import kapcb.framework.web.constants.pattern.DatePatternPool;
-import kapcb.framework.web.util.DateUtil;
+import com.kapcb.framework.common.constants.enums.StringPool;
+import com.kapcb.framework.common.constants.pattern.DateFormatPattern;
+import com.kapcb.framework.common.util.DateUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -50,7 +50,7 @@ public class WebLogAspect {
             log.info(StringPool.PROCESS_COST_TIME.value(), costTime);
             log.info(StringPool.PROCESS_CLASS_NAME.value(), className);
             log.info(StringPool.PROCESS_METHOD_NAME.value(), methodName);
-            log.info(StringPool.PROCESS_LOCAL_DATE_TIME.value(), DateUtil.format(now, DatePatternPool.NORM_DATETIME_PATTERN));
+            log.info(StringPool.PROCESS_LOCAL_DATE_TIME.value(), DateUtil.format(now, DateFormatPattern.NORM_DATETIME_PATTERN));
             log.info(StringPool.SPILT_LINE.value());
         }
     }

@@ -1,6 +1,6 @@
 package com.kapcb.framework.web.exception;
 
-import com.kapcb.framework.web.model.result.IResultCode;
+import com.kapcb.framework.common.result.IResultCode;
 import lombok.experimental.UtilityClass;
 
 /**
