@@ -1,8 +1,9 @@
 package com.kapcb.framework.web.aspect;
 
+import cn.hutool.core.date.DateUtil;
 import com.kapcb.framework.common.constants.enums.StringPool;
 import com.kapcb.framework.common.constants.pattern.DateFormatPattern;
-import com.kapcb.framework.common.util.DateUtil;
+import com.kapcb.framework.web.properties.WebLogProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -12,6 +13,7 @@ import org.springframework.core.env.Environment;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * <a>Title: WebLogAspect </a>
@@ -25,19 +27,18 @@ import java.time.LocalDateTime;
 @Slf4j
 @Aspect
 @RequiredArgsConstructor
-public class WebLogAspect {
+public abstract class WebLogAspect {
 
     private final Environment environment;
+    private final WebLogProperties webLogProperties;
     private final HttpServletRequest httpServletRequest;
 
     @Around("(@within(org.springframework.stereotype.Controller)) || @within(org.springframework.web.bind.annotation.RestController) && execution(public * com.kapcb.ccc..*.controller..*.*(..))")
-    public Object controllerEndPointAround(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
-        String className = proceedingJoinPoint.getTarget().getClass().getName();
-        String methodName = proceedingJoinPoint.getSignature().getName();
+    public Object EndPointLog(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         LocalDateTime now = LocalDateTime.now();
         long startTime = System.currentTimeMillis();
         Object returnValue = null;
-        Exception exception;
+        Exception exception = null;
         try {
             returnValue = proceedingJoinPoint.proceed();
             return returnValue;
@@ -45,14 +46,35 @@ public class WebLogAspect {
             exception = e;
             throw e;
         } finally {
-            long costTime = System.currentTimeMillis() - startTime;
             log.info(StringPool.SPILT_LINE.value());
-            log.info(StringPool.PROCESS_COST_TIME.value(), costTime);
-            log.info(StringPool.PROCESS_CLASS_NAME.value(), className);
-            log.info(StringPool.PROCESS_METHOD_NAME.value(), methodName);
-            log.info(StringPool.PROCESS_LOCAL_DATE_TIME.value(), DateUtil.format(now, DateFormatPattern.NORM_DATETIME_PATTERN));
+            if (webLogProperties.isRequestCostTime()) {
+                log.info(StringPool.PROCESS_COST_TIME.value(), System.currentTimeMillis() - startTime);
+            }
+            if (webLogProperties.isApplicationName()) {
+                log.info(StringPool.REQUEST_SERVER_NAME.value(), environment.getProperty(StringPool.SERVER_APPLICATION_NAME.value()));
+            }
+            if (webLogProperties.isRequestUri()) {
+                log.info(StringPool.REQUEST_URI.value(), httpServletRequest.getRequestURI());
+            }
+            if (webLogProperties.isRequestUrl()) {
+                log.info(StringPool.REQUEST_URL.value(), httpServletRequest.getRequestURL());
+            }
+            if (webLogProperties.isMethodName()) {
+                log.info(StringPool.PROCESS_METHOD_NAME.value(), proceedingJoinPoint.getSignature().getName());
+            }
+            if (webLogProperties.isClassName()) {
+                log.info(StringPool.PROCESS_CLASS_NAME.value(), proceedingJoinPoint.getTarget().getClass().getName());
+            }
+            if (webLogProperties.isRequestTime()) {
+                log.info(StringPool.PROCESS_LOCAL_DATE_TIME.value(), DateUtil.format(now, DateFormatPattern.NORM_DATETIME_PATTERN));
+            }
+            if (Objects.isNull(exception) && webLogProperties.isReturnValue()) {
+                log.info(StringPool.REQUEST_RETURN_VALUE.value(), returnValue);
+            }
+            if (Objects.nonNull(exception) && webLogProperties.isExceptionMessage()) {
+                log.error(StringPool.REQUEST_ERROR_MESSAGE.value(), exception.getMessage());
+            }
             log.info(StringPool.SPILT_LINE.value());
         }
     }
-
 }
