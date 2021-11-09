@@ -34,7 +34,7 @@ public abstract class WebLogAspect {
     private final HttpServletRequest httpServletRequest;
 
     @Around("(@within(org.springframework.stereotype.Controller)) || @within(org.springframework.web.bind.annotation.RestController) && execution(public * com.kapcb.ccc..*.controller..*.*(..))")
-    public Object EndPointLog(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+    public Object logAspect(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         LocalDateTime now = LocalDateTime.now();
         long startTime = System.currentTimeMillis();
         Object returnValue = null;
