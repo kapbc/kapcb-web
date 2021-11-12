@@ -39,19 +39,19 @@ public class RequestUtil {
      */
     public static String getIpAddress(HttpServletRequest request) {
         String ip = request.getHeader(StringPool.HTTP_REQUEST_X_FOR_WARDED_FOR.value());
-        if (StringUtils.isBlank(ip) || StringUtils.equalsAnyIgnoreCase(StringPool.HTTP_REQUEST_UN_KNOWN.value(), ip)) {
+        if (StringUtils.isBlank(ip) || StringUtils.equalsIgnoreCase(StringPool.HTTP_REQUEST_UN_KNOWN.value(), ip)) {
             ip = request.getHeader(StringPool.HTTP_REQUEST_PROXY_CLIENT_IP.value());
         }
-        if (StringUtils.isBlank(ip) || StringUtils.equalsAnyIgnoreCase(StringPool.HTTP_REQUEST_UN_KNOWN.value(), ip)) {
+        if (StringUtils.isBlank(ip) || StringUtils.equalsIgnoreCase(StringPool.HTTP_REQUEST_UN_KNOWN.value(), ip)) {
             ip = request.getHeader(StringPool.HTTP_REQUEST_WL_PROXY_CLIENT_IP.value());
         }
-        if (StringUtils.isBlank(ip) || StringUtils.equalsAnyIgnoreCase(StringPool.HTTP_REQUEST_UN_KNOWN.value(), ip)) {
+        if (StringUtils.isBlank(ip) || StringUtils.equalsIgnoreCase(StringPool.HTTP_REQUEST_UN_KNOWN.value(), ip)) {
             ip = request.getHeader(StringPool.HTTP_REQUEST_HTTP_CLIENT_IP.value());
         }
-        if (StringUtils.isBlank(ip) || StringUtils.equalsAnyIgnoreCase(StringPool.HTTP_REQUEST_UN_KNOWN.value(), ip)) {
+        if (StringUtils.isBlank(ip) || StringUtils.equalsIgnoreCase(StringPool.HTTP_REQUEST_UN_KNOWN.value(), ip)) {
             ip = request.getHeader(StringPool.HTTP_REQUEST_HTTP_X_FORWARDED_FOR.value());
         }
-        if (StringUtils.isBlank(ip) || StringUtils.equalsAnyIgnoreCase(StringPool.HTTP_REQUEST_UN_KNOWN.value(), ip)) {
+        if (StringUtils.isBlank(ip) || StringUtils.equalsIgnoreCase(StringPool.HTTP_REQUEST_UN_KNOWN.value(), ip)) {
             ip = request.getRemoteAddr();
         }
         return ip;

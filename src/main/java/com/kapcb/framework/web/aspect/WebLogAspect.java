@@ -4,13 +4,14 @@ import cn.hutool.core.date.DateUtil;
 import com.kapcb.framework.common.constants.enums.StringPool;
 import com.kapcb.framework.common.constants.pattern.DateFormatPattern;
 import com.kapcb.framework.web.properties.WebLogProperties;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -26,12 +27,17 @@ import java.util.Objects;
  */
 @Slf4j
 @Aspect
-@RequiredArgsConstructor
+@Configuration
 public abstract class WebLogAspect {
 
-    private final Environment environment;
-    private final WebLogProperties webLogProperties;
-    private final HttpServletRequest httpServletRequest;
+    @Resource
+    private Environment environment;
+
+    @Resource
+    private WebLogProperties webLogProperties;
+
+    @Resource
+    private HttpServletRequest httpServletRequest;
 
     @Around("(@within(org.springframework.stereotype.Controller)) || @within(org.springframework.web.bind.annotation.RestController) && execution(public * com.kapcb.ccc..*.controller..*.*(..))")
     public Object logAspect(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {

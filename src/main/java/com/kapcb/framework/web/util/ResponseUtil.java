@@ -30,8 +30,13 @@ import java.nio.charset.StandardCharsets;
 @UtilityClass
 public class ResponseUtil {
 
-    @NonNull
-    public static void setHeader(@NonNull HttpServletResponse httpServletResponse, @Nullable String type) {
+    /**
+     * set http servlet response header
+     *
+     * @param type                String
+     * @param httpServletResponse HttpServletResponse
+     */
+    public static void setHeader(@Nullable String type, @NonNull HttpServletResponse httpServletResponse) {
         // default png
         if (StringUtils.equalsAnyIgnoreCase(type, StringPool.IMAGE_SUFFIX_GIF.value())) {
             httpServletResponse.setContentType(MediaType.IMAGE_GIF_VALUE);
@@ -87,6 +92,15 @@ public class ResponseUtil {
         return setUpResponse(httpServletResponse, MediaType.APPLICATION_JSON_VALUE, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, value);
     }
 
+    /**
+     * set up response
+     *
+     * @param response    HttpServletResponse
+     * @param contentType String
+     * @param data        T
+     * @param <T>         <T>
+     * @throws IOException IOException
+     */
     public static <T> void setUpResponse(HttpServletResponse response, String contentType, T data) throws IOException {
         response.setContentType(contentType);
         response.getOutputStream().write(JSON.toJSONBytes(data));
@@ -94,6 +108,14 @@ public class ResponseUtil {
         response.getOutputStream().close();
     }
 
+    /**
+     * set up json response
+     *
+     * @param response HttpServletResponse
+     * @param data     T
+     * @param <T>      <T>
+     * @throws IOException IOException
+     */
     public static <T> void setUpJSONResponse(HttpServletResponse response, T data) throws IOException {
         setUpResponse(response, ContentType.JSON.getValue(), data);
     }
