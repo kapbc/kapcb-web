@@ -32,6 +32,7 @@ public class ResponseUtil {
 
     /**
      * set http servlet response header
+     * 设置图片不缓存
      *
      * @param type                String
      * @param httpServletResponse HttpServletResponse
