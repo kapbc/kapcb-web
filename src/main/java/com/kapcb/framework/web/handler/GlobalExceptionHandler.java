@@ -3,6 +3,7 @@ package com.kapcb.framework.web.handler;
 import cn.hutool.core.util.StrUtil;
 import com.kapcb.framework.common.constants.enums.StringPool;
 import com.kapcb.framework.common.result.CommonResult;
+import com.kapcb.framework.common.util.ThrowableUtil;
 import com.kapcb.framework.web.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -33,7 +34,14 @@ import java.util.Set;
  */
 @Slf4j
 @RestControllerAdvice
+@SuppressWarnings("unchecked")
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(value = {Throwable.class})
+    public CommonResult handlerThrowable(Throwable throwable) {
+        log.error(ThrowableUtil.getStackTrace(throwable));
+        return CommonResult.failed(throwable.getMessage());
+    }
 
     @ExceptionHandler(value = {BusinessException.class})
     public CommonResult handBusinessException(BusinessException businessException) {
