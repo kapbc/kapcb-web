@@ -11,6 +11,7 @@ import com.kapcb.framework.common.constants.enums.StringPool;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.HttpHeaders;
 import org.springframework.lang.NonNull;
 import org.springframework.util.Assert;
 
@@ -78,6 +79,24 @@ public class RequestUtil {
         UserAgent userAgent = UserAgentUtil.parse(httpServletRequest.getHeader(StringPool.HTTP_REQUEST_USER_AGENT.value()));
         Browser browser = userAgent.getBrowser();
         return browser.getName();
+    }
+
+    public static String getAuthorization(HttpServletRequest httpServletRequest) {
+        Assert.notNull(httpServletRequest, "request can not be null");
+        return httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
+    }
+
+    public static String getAccessToken(String authorization) {
+        Assert.hasLength(authorization, "authorization can not be null");
+        String accessToken = null;
+        if (authorization.startsWith(StringPool.AUTHORIZATION_BEARER.value())) {
+            accessToken = authorization.substring(StringPool.AUTHORIZATION_BEARER.value().length());
+        }
+        return accessToken;
+    }
+
+    public static String getAccessToken(HttpServletRequest httpServletRequest) {
+        return getAccessToken(getAuthorization(httpServletRequest));
     }
 
     public static void main(String[] args) {
