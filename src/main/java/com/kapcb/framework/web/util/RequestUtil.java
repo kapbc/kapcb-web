@@ -1,10 +1,18 @@
 package com.kapcb.framework.web.util;
 
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.http.HttpUtil;
+import cn.hutool.http.useragent.Browser;
+import cn.hutool.http.useragent.UserAgent;
+import cn.hutool.http.useragent.UserAgentUtil;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.kapcb.framework.common.constants.enums.StringPool;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.lang.NonNull;
+import org.springframework.util.Assert;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -55,6 +63,26 @@ public class RequestUtil {
             ip = request.getRemoteAddr();
         }
         return ip;
+    }
+
+    public static String getCity(String ipAddress) {
+        Assert.hasLength(ipAddress, "ip address can not be null or empty");
+        String requestUrl = StrUtil.format(StringPool.REQUEST_CITY_HTTP_URL.value(), ipAddress);
+        String s = HttpUtil.get(requestUrl);
+        JSONObject jsonObject = JSON.parseObject(s);
+        return (String) jsonObject.get("addr");
+    }
+
+    public static String getBrowser(HttpServletRequest httpServletRequest) {
+        Assert.notNull(httpServletRequest, "request can not be null");
+        UserAgent userAgent = UserAgentUtil.parse(httpServletRequest.getHeader(StringPool.HTTP_REQUEST_USER_AGENT.value()));
+        Browser browser = userAgent.getBrowser();
+        return browser.getName();
+    }
+
+    public static void main(String[] args) {
+        String city = getCity("122.10.128.255");
+        System.out.println("city = " + city);
     }
 
 }
