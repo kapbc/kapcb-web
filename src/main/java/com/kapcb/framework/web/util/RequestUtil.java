@@ -82,12 +82,15 @@ public class RequestUtil {
     }
 
     public static String getAuthorization(HttpServletRequest httpServletRequest) {
-        Assert.notNull(httpServletRequest, "request can not be null");
+//        Assert.notNull(httpServletRequest, "request can not be null");
         return httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
     }
 
     public static String getAccessToken(String authorization) {
-        Assert.hasLength(authorization, "authorization can not be null");
+//        Assert.hasLength(authorization, "authorization can not be null");
+        if (StringUtils.isBlank(authorization)) {
+            return null;
+        }
         String accessToken = null;
         if (authorization.startsWith(StringPool.AUTHORIZATION_BEARER.value())) {
             accessToken = authorization.substring(StringPool.AUTHORIZATION_BEARER.value().length());
